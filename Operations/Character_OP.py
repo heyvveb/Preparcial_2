@@ -37,8 +37,8 @@ def update_one_character_db(id: int, new_character: CharacterUpdate, session: Se
 
 def delete_one_character_db(id: int, session: Session):
     character = session.get(CharacterID, id)
-    if not character:
-        return None
+    if not character or character.status == "inactive":
+        return None 
     character.status = "inactive"
     session.add(character)
     session.commit()

@@ -36,7 +36,7 @@ def update_one_boss_db(id: int, new_boss: BossUpdate, session: Session):
 
 def delete_one_boss_db(id: int, session: Session):
     boss = session.get(BossID, id)
-    if not boss:
+    if not boss or boss.status == "inactive":
         return None
     boss.status = "inactive"
     session.add(boss)
