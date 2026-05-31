@@ -22,7 +22,7 @@ async def get_all_bosses(
 
 @router_bosses.get("/deleted", response_model=List[BossID])
 async def get_all_deleted(session: SessionDep):
-    return show_all_deleted_db(session)
+    return show_all_deleted_bosses_db(session)
 
 @router_bosses.get("/{id}", response_model=BossID)
 async def get_boss(id: int, session: SessionDep):

@@ -14,7 +14,7 @@ def show_all_characters_db(session: Session):
     statement = select(CharacterID).where(CharacterID.status == "active")
     return session.exec(statement).all()
 
-def show_all_deleted_db(session: Session):
+def show_all_deleted_characters_db(session: Session):
     statement = select(CharacterID).where(CharacterID.status == "inactive")
     return session.exec(statement).all()
 

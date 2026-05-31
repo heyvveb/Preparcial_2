@@ -25,7 +25,7 @@ async def get_all_characters(
 
 @router_characters.get("/deleted", response_model=List[CharacterID])
 async def get_all_deleted(session: SessionDep):
-    return show_all_deleted_db(session)
+    return show_all_deleted_characters_db(session)
 
 @router_characters.get("/{id}", response_model=CharacterID)
 async def get_character(id: int, session: SessionDep):

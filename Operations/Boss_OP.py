@@ -13,7 +13,7 @@ def show_all_bosses_db(session: Session):
     statement = select(BossID).where(BossID.status == "active")
     return session.exec(statement).all()
 
-def show_all_deleted_db(session: Session):
+def show_all_deleted_bosses_db(session: Session):
     statement = select(BossID).where(BossID.status == "inactive")
     return session.exec(statement).all()
 
