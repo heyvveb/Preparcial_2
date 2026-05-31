@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Bosses Eliminados{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Bosses Eliminados</h1>
+    <a href="/bosses/" class="btn btn-primary">Volver a activos</a>
+</div>
+{% if bosses %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Salud</th>
+                <th>Fases</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for boss in bosses %}
+            <tr>
+                <td>{{ boss.id }}</td>
+                <td>{{ boss.name }}</td>
+                <td>{{ boss.health }}</td>
+                <td>{{ boss.phase_count }}</td>
+                <td class="actions">
+                    <form method="POST" action="/bosses/{{ boss.id }}/restore" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-success">Restaurar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="empty-state">No hay bosses eliminados.</p>
+{% endif %}
+{% endblock %}
