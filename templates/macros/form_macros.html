@@ -1,0 +1,48 @@
+{% macro input_field(label, name, value='', errors={}, type='text', required=False) -%}
+<div class="form-group">
+    <label for="{{ name }}">{{ label }}{% if required %}<span class="required">*</span>{% endif %}</label>
+    <input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="{{ value }}" class="{% if errors.get(name) %}input-error{% endif %}" {% if required %}required{% endif %}>
+    {% if errors.get(name) %}
+    <span class="error-msg">{{ errors[name] }}</span>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro select_field(label, name, options, value='', errors={}, required=False) -%}
+<div class="form-group">
+    <label for="{{ name }}">{{ label }}{% if required %}<span class="required">*</span>{% endif %}</label>
+    <select id="{{ name }}" name="{{ name }}" class="{% if errors.get(name) %}input-error{% endif %}" {% if required %}required{% endif %}>
+        <option value="">-- Seleccionar --</option>
+        {% for opt in options %}
+        <option value="{{ opt }}" {% if value == opt %}selected{% endif %}>{{ opt }}</option>
+        {% endfor %}
+    </select>
+    {% if errors.get(name) %}
+    <span class="error-msg">{{ errors[name] }}</span>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro checkbox_field(label, name, checked=False, errors={}) -%}
+<div class="form-group form-checkbox">
+    <input type="checkbox" id="{{ name }}" name="{{ name }}" value="true" {% if checked %}checked{% endif %}>
+    <label for="{{ name }}">{{ label }}</label>
+    {% if errors.get(name) %}
+    <span class="error-msg">{{ errors[name] }}</span>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro submit_button(text, class='btn-primary') -%}
+<div class="form-actions">
+    <button type="submit" class="btn {{ class }}">{{ text }}</button>
+    <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+</div>
+{%- endmacro %}
+
+{% macro search_form(search='') -%}
+<form method="GET" class="search-form">
+    <input type="text" name="search" placeholder="Buscar por nombre..." value="{{ search }}" class="search-input">
+    <button type="submit" class="btn btn-search">Buscar</button>
+</form>
+{%- endmacro %}
