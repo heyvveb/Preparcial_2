@@ -300,7 +300,36 @@ main {
     margin-top: 25px;
 }
 
-/* Search form */
+/* Filter form */
+.filter-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-input {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #0f3460;
+}
+
+input.filter-input {
+    max-width: 200px;
+}
+
+select.filter-input {
+    min-width: 140px;
+}
+
+/* Search form (legacy) */
 .search-form {
     display: flex;
     gap: 10px;
