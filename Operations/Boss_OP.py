@@ -17,8 +17,14 @@ def show_all_deleted_db(session: Session):
     statement = select(BossID).where(BossID.status == "inactive")
     return session.exec(statement).all()
 
-def search_bosses_by_name_db(search: str, session: Session):
-    statement = select(BossID).where(BossID.status == "active", BossID.name.like(f"%{search}%"))
+def filter_bosses_db(session: Session, search: str = "", is_optional: bool | None = None, health_min: int | None = None):
+    statement = select(BossID).where(BossID.status == "active")
+    if search:
+        statement = statement.where(BossID.name.like(f"%{search}%"))
+    if is_optional is not None:
+        statement = statement.where(BossID.is_optional == is_optional)
+    if health_min is not None:
+        statement = statement.where(BossID.health >= health_min)
     return session.exec(statement).all()
 
 def find_one_boss_db(id: int, session: Session):

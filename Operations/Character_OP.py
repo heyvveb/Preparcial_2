@@ -18,8 +18,18 @@ def show_all_deleted_db(session: Session):
     statement = select(CharacterID).where(CharacterID.status == "inactive")
     return session.exec(statement).all()
 
-def search_characters_by_name_db(search: str, session: Session):
-    statement = select(CharacterID).where(CharacterID.status == "active", CharacterID.name.like(f"%{search}%"))
+def filter_characters_db(session: Session, search: str = "", is_hollow: bool | None = None, main_stat: str | None = None, level_min: int | None = None, level_max: int | None = None):
+    statement = select(CharacterID).where(CharacterID.status == "active")
+    if search:
+        statement = statement.where(CharacterID.name.like(f"%{search}%"))
+    if is_hollow is not None:
+        statement = statement.where(CharacterID.is_hollow == is_hollow)
+    if main_stat:
+        statement = statement.where(CharacterID.main_stat == main_stat)
+    if level_min is not None:
+        statement = statement.where(CharacterID.level >= level_min)
+    if level_max is not None:
+        statement = statement.where(CharacterID.level <= level_max)
     return session.exec(statement).all()
 
 def find_one_character_db(id: int, session: Session):
