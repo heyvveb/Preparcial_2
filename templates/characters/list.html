@@ -10,7 +10,24 @@
     </div>
 </div>
 
-{{ forms.search_form(search) }}
+<form method="GET" class="filter-form">
+    <input type="text" name="search" placeholder="Buscar por nombre..." value="{{ search }}" class="filter-input">
+    <select name="is_hollow" class="filter-input">
+        <option value="">Todos</option>
+        <option value="true" {{ 'selected' if is_hollow == 'true' }}>Hollow</option>
+        <option value="false" {{ 'selected' if is_hollow == 'false' }}>No hollow</option>
+    </select>
+    <select name="main_stat" class="filter-input">
+        <option value="">Todas las stats</option>
+        {% for stat in ["Strength", "Dexterity", "Quality", "Sorcerer", "Faith", "Pyromancer", "Tank", "Hybrid"] %}
+        <option value="{{ stat }}" {{ 'selected' if main_stat == stat }}>{{ stat }}</option>
+        {% endfor %}
+    </select>
+    <input type="number" name="level_min" placeholder="Nivel mín" value="{{ level_min }}" class="filter-input" min="0">
+    <input type="number" name="level_max" placeholder="Nivel máx" value="{{ level_max }}" class="filter-input" min="0">
+    <button type="submit" class="btn btn-search">Filtrar</button>
+    <a href="/characters/" class="btn btn-secondary">Limpiar</a>
+</form>
 
 {% if characters %}
 <div class="table-container">
@@ -22,7 +39,6 @@
                 <th>Nivel</th>
                 <th>Hollow</th>
                 <th>Stat principal</th>
-                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,7 +50,6 @@
                 <td>{{ character.level }}</td>
                 <td>{{ "Sí" if character.is_hollow else "No" }}</td>
                 <td>{{ character.main_stat or "-" }}</td>
-                <td><span class="badge badge-{{ character.status }}">{{ character.status }}</span></td>
                 <td class="actions">
                     <a href="/characters/{{ character.id }}/edit" class="btn btn-sm btn-warning">Editar</a>
                     <form method="POST" action="/characters/{{ character.id }}/delete" style="display:inline">

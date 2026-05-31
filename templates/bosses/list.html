@@ -10,7 +10,17 @@
     </div>
 </div>
 
-{{ forms.search_form(search) }}
+<form method="GET" class="filter-form">
+    <input type="text" name="search" placeholder="Buscar por nombre..." value="{{ search }}" class="filter-input">
+    <select name="is_optional" class="filter-input">
+        <option value="">Todos</option>
+        <option value="true" {{ 'selected' if is_optional == 'true' }}>Opcional</option>
+        <option value="false" {{ 'selected' if is_optional == 'false' }}>No opcional</option>
+    </select>
+    <input type="number" name="health_min" placeholder="Salud mínima" value="{{ health_min }}" class="filter-input" min="0">
+    <button type="submit" class="btn btn-search">Filtrar</button>
+    <a href="/bosses/" class="btn btn-secondary">Limpiar</a>
+</form>
 
 {% if bosses %}
 <div class="table-container">
