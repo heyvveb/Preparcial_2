@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Characters Eliminados{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Characters Eliminados</h1>
+    <a href="/characters/" class="btn btn-primary">Volver a activos</a>
+</div>
+{% if characters %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Nivel</th>
+                <th>Stat principal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for character in characters %}
+            <tr>
+                <td>{{ character.id }}</td>
+                <td>{{ character.name }}</td>
+                <td>{{ character.level }}</td>
+                <td>{{ character.main_stat or "-" }}</td>
+                <td class="actions">
+                    <form method="POST" action="/characters/{{ character.id }}/restore" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-success">Restaurar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="empty-state">No hay characters eliminados.</p>
+{% endif %}
+{% endblock %}
