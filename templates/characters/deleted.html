@@ -23,7 +23,7 @@
                 <td>{{ character.id }}</td>
                 <td>{{ character.name }}</td>
                 <td>{{ character.level }}</td>
-                <td>{{ character.main_stat or "-" }}</td>
+                <td>{{ character.main_stat.value or "-" }}</td>
                 <td class="actions">
                     <form method="POST" action="/characters/{{ character.id }}/restore" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-success">Restaurar</button>
