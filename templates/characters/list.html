@@ -49,7 +49,7 @@
                 <td>{{ character.name }}</td>
                 <td>{{ character.level }}</td>
                 <td>{{ "Sí" if character.is_hollow else "No" }}</td>
-                <td>{{ character.main_stat or "-" }}</td>
+                <td>{{ character.main_stat.value or "-" }}</td>
                 <td class="actions">
                     <a href="/characters/{{ character.id }}/edit" class="btn btn-sm btn-warning">Editar</a>
                     <form method="POST" action="/characters/{{ character.id }}/delete" style="display:inline">
