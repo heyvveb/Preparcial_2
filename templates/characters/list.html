@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "macros/form_macros.html" as forms %}
+{% block title %}Characters - Lista{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Characters</h1>
+    <div class="header-actions">
+        <a href="/characters/create" class="btn btn-success">+ Nuevo Character</a>
+        <a href="/characters/deleted" class="btn btn-secondary">Ver eliminados</a>
+    </div>
+</div>
+
+{{ forms.search_form(search) }}
+
+{% if characters %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Nivel</th>
+                <th>Hollow</th>
+                <th>Stat principal</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for character in characters %}
+            <tr>
+                <td>{{ character.id }}</td>
+                <td>{{ character.name }}</td>
+                <td>{{ character.level }}</td>
+                <td>{{ "Sí" if character.is_hollow else "No" }}</td>
+                <td>{{ character.main_stat or "-" }}</td>
+                <td><span class="badge badge-{{ character.status }}">{{ character.status }}</span></td>
+                <td class="actions">
+                    <a href="/characters/{{ character.id }}/edit" class="btn btn-sm btn-warning">Editar</a>
+                    <form method="POST" action="/characters/{{ character.id }}/delete" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este character?')">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="empty-state">No hay characters registrados.</p>
+{% endif %}
+{% endblock %}
