@@ -18,6 +18,10 @@ def show_all_deleted_db(session: Session):
     statement = select(CharacterID).where(CharacterID.status == "inactive")
     return session.exec(statement).all()
 
+def search_characters_by_name_db(search: str, session: Session):
+    statement = select(CharacterID).where(CharacterID.status == "active", CharacterID.name.like(f"%{search}%"))
+    return session.exec(statement).all()
+
 def find_one_character_db(id: int, session: Session):
     character = session.get(CharacterID, id)
     if not character or character.status != "active":

@@ -17,6 +17,10 @@ def show_all_deleted_db(session: Session):
     statement = select(BossID).where(BossID.status == "inactive")
     return session.exec(statement).all()
 
+def search_bosses_by_name_db(search: str, session: Session):
+    statement = select(BossID).where(BossID.status == "active", BossID.name.like(f"%{search}%"))
+    return session.exec(statement).all()
+
 def find_one_boss_db(id: int, session: Session):
     boss = session.get(BossID, id)
     if not boss or boss.status != "active":
