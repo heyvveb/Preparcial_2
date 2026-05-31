@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from typing import Optional
+from fastapi import APIRouter, HTTPException, Query
 from typing import List
 from Modelos.Boss import Boss, BossID, BossUpdate
 from db import SessionDep
@@ -11,8 +12,13 @@ async def create_boss(boss: Boss, session: SessionDep):
     return create_boss_db(boss, session)
 
 @router_bosses.get("/", response_model=List[BossID])
-async def get_all_bosses(session: SessionDep):
-    return show_all_bosses_db(session)
+async def get_all_bosses(
+    session: SessionDep,
+    search: str = Query("", description="Filter by name"),
+    is_optional: Optional[bool] = Query(None, description="Filter by optional status"),
+    health_min: Optional[int] = Query(None, description="Minimum health"),
+):
+    return filter_bosses_db(session, search=search, is_optional=is_optional, health_min=health_min)
 
 @router_bosses.get("/deleted", response_model=List[BossID])
 async def get_all_deleted(session: SessionDep):

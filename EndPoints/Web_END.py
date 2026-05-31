@@ -83,15 +83,22 @@ async def index(request: Request, session: SessionDep):
 
 
 @router_web.get("/bosses/")
-async def list_bosses(request: Request, session: SessionDep, search: str = ""):
-    if search:
-        bosses = search_bosses_by_name_db(search, session)
-    else:
-        bosses = show_all_bosses_db(session)
+async def list_bosses(
+    request: Request,
+    session: SessionDep,
+    search: str = "",
+    is_optional: str = "",
+    health_min: str = "",
+):
+    is_optional_val = None if is_optional == "" else (is_optional == "true")
+    health_min_val = int(health_min) if health_min else None
+    bosses = filter_bosses_db(session, search=search, is_optional=is_optional_val, health_min=health_min_val)
     return _render("bosses/list.html", {
         "request": request,
         "bosses": bosses,
         "search": search,
+        "is_optional": is_optional,
+        "health_min": health_min,
     })
 
 
@@ -191,15 +198,28 @@ async def list_deleted_bosses(request: Request, session: SessionDep):
 
 
 @router_web.get("/characters/")
-async def list_characters(request: Request, session: SessionDep, search: str = ""):
-    if search:
-        characters = search_characters_by_name_db(search, session)
-    else:
-        characters = show_all_characters_db(session)
+async def list_characters(
+    request: Request,
+    session: SessionDep,
+    search: str = "",
+    is_hollow: str = "",
+    main_stat: str = "",
+    level_min: str = "",
+    level_max: str = "",
+):
+    is_hollow_val = None if is_hollow == "" else (is_hollow == "true")
+    main_stat_val = main_stat if main_stat else None
+    level_min_val = int(level_min) if level_min else None
+    level_max_val = int(level_max) if level_max else None
+    characters = filter_characters_db(session, search=search, is_hollow=is_hollow_val, main_stat=main_stat_val, level_min=level_min_val, level_max=level_max_val)
     return _render("characters/list.html", {
         "request": request,
         "characters": characters,
         "search": search,
+        "is_hollow": is_hollow,
+        "main_stat": main_stat,
+        "level_min": level_min,
+        "level_max": level_max,
     })
 
 

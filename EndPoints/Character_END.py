@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from typing import Optional
+from fastapi import APIRouter, HTTPException, Query
 from typing import List
 from Modelos.Character import Character, CharacterID, CharacterUpdate
+from Modelos.Enums import main_statEnum
 from db import SessionDep
 from Operations.Character_OP import *
 
@@ -11,8 +13,15 @@ async def create_character(character: Character, session: SessionDep):
     return create_character_db(character, session)
 
 @router_characters.get("/", response_model=List[CharacterID])
-async def get_all_characters(session: SessionDep):
-    return show_all_characters_db(session)
+async def get_all_characters(
+    session: SessionDep,
+    search: str = Query("", description="Filter by name"),
+    is_hollow: Optional[bool] = Query(None, description="Filter by hollow status"),
+    main_stat: Optional[main_statEnum] = Query(None, description="Filter by main stat"),
+    level_min: Optional[int] = Query(None, description="Minimum level"),
+    level_max: Optional[int] = Query(None, description="Maximum level"),
+):
+    return filter_characters_db(session, search=search, is_hollow=is_hollow, main_stat=main_stat, level_min=level_min, level_max=level_max)
 
 @router_characters.get("/deleted", response_model=List[CharacterID])
 async def get_all_deleted(session: SessionDep):
