@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import RedirectResponse
-from starlette.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse, HTMLResponse
+from jinja2 import Environment, FileSystemLoader
 from db import SessionDep
 from Modelos.Boss import Boss, BossID, BossUpdate
 from Modelos.Character import Character, CharacterID, CharacterUpdate
@@ -11,7 +11,15 @@ from Operations.Character_OP import *
 
 router_web = APIRouter()
 _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-template_env = Jinja2Templates(directory=os.path.join(_BASE_DIR, "..", "templates"))
+_jinja_env = Environment(loader=FileSystemLoader(
+    searchpath=os.path.join(_BASE_DIR, "..", "templates")
+))
+
+
+def _render(name, context, status_code=200):
+    template = _jinja_env.get_template(name)
+    html = template.render(**context)
+    return HTMLResponse(content=html, status_code=status_code)
 
 
 def validate_boss_form(data: dict) -> dict:
@@ -67,7 +75,7 @@ def validate_character_form(data: dict) -> dict:
 async def index(request: Request, session: SessionDep):
     boss_count = len(show_all_bosses_db(session))
     character_count = len(show_all_characters_db(session))
-    return template_env.TemplateResponse("index.html", {
+    return _render("index.html", {
         "request": request,
         "boss_count": boss_count,
         "character_count": character_count,
@@ -80,7 +88,7 @@ async def list_bosses(request: Request, session: SessionDep, search: str = ""):
         bosses = search_bosses_by_name_db(search, session)
     else:
         bosses = show_all_bosses_db(session)
-    return template_env.TemplateResponse("bosses/list.html", {
+    return _render("bosses/list.html", {
         "request": request,
         "bosses": bosses,
         "search": search,
@@ -89,7 +97,7 @@ async def list_bosses(request: Request, session: SessionDep, search: str = ""):
 
 @router_web.get("/bosses/create")
 async def create_boss_form(request: Request):
-    return template_env.TemplateResponse("bosses/create.html", {
+    return _render("bosses/create.html", {
         "request": request,
         "errors": {},
         "form_data": {},
@@ -102,7 +110,7 @@ async def create_boss_submit(request: Request, session: SessionDep):
     form_data = dict(data)
     errors = validate_boss_form(form_data)
     if errors:
-        return template_env.TemplateResponse("bosses/create.html", {
+        return _render("bosses/create.html", {
             "request": request,
             "errors": errors,
             "form_data": form_data,
@@ -123,7 +131,7 @@ async def edit_boss_form(request: Request, id: int, session: SessionDep):
     boss = find_one_boss_db(id, session)
     if not boss:
         raise HTTPException(status_code=404, detail="Boss not found")
-    return template_env.TemplateResponse("bosses/edit.html", {
+    return _render("bosses/edit.html", {
         "request": request,
         "boss": boss,
         "errors": {},
@@ -140,7 +148,7 @@ async def edit_boss_submit(request: Request, id: int, session: SessionDep):
     form_data = dict(data)
     errors = validate_boss_form(form_data)
     if errors:
-        return template_env.TemplateResponse("bosses/edit.html", {
+        return _render("bosses/edit.html", {
             "request": request,
             "boss": boss,
             "errors": errors,
@@ -176,7 +184,7 @@ async def restore_boss(id: int, session: SessionDep):
 @router_web.get("/bosses/deleted")
 async def list_deleted_bosses(request: Request, session: SessionDep):
     bosses = show_all_deleted_db(session)
-    return template_env.TemplateResponse("bosses/deleted.html", {
+    return _render("bosses/deleted.html", {
         "request": request,
         "bosses": bosses,
     })
@@ -188,7 +196,7 @@ async def list_characters(request: Request, session: SessionDep, search: str = "
         characters = search_characters_by_name_db(search, session)
     else:
         characters = show_all_characters_db(session)
-    return template_env.TemplateResponse("characters/list.html", {
+    return _render("characters/list.html", {
         "request": request,
         "characters": characters,
         "search": search,
@@ -197,7 +205,7 @@ async def list_characters(request: Request, session: SessionDep, search: str = "
 
 @router_web.get("/characters/create")
 async def create_character_form(request: Request):
-    return template_env.TemplateResponse("characters/create.html", {
+    return _render("characters/create.html", {
         "request": request,
         "errors": {},
         "form_data": {},
@@ -211,7 +219,7 @@ async def create_character_submit(request: Request, session: SessionDep):
     form_data["is_hollow"] = "true" if form_data.get("is_hollow") == "true" else "false"
     errors = validate_character_form(form_data)
     if errors:
-        return template_env.TemplateResponse("characters/create.html", {
+        return _render("characters/create.html", {
             "request": request,
             "errors": errors,
             "form_data": form_data,
@@ -233,7 +241,7 @@ async def edit_character_form(request: Request, id: int, session: SessionDep):
     character = find_one_character_db(id, session)
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
-    return template_env.TemplateResponse("characters/edit.html", {
+    return _render("characters/edit.html", {
         "request": request,
         "character": character,
         "errors": {},
@@ -251,7 +259,7 @@ async def edit_character_submit(request: Request, id: int, session: SessionDep):
     form_data["is_hollow"] = "true" if form_data.get("is_hollow") == "true" else "false"
     errors = validate_character_form(form_data)
     if errors:
-        return template_env.TemplateResponse("characters/edit.html", {
+        return _render("characters/edit.html", {
             "request": request,
             "character": character,
             "errors": errors,
@@ -288,7 +296,7 @@ async def restore_character(id: int, session: SessionDep):
 @router_web.get("/characters/deleted")
 async def list_deleted_characters(request: Request, session: SessionDep):
     characters = show_all_deleted_db(session)
-    return template_env.TemplateResponse("characters/deleted.html", {
+    return _render("characters/deleted.html", {
         "request": request,
         "characters": characters,
     })
