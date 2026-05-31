@@ -1,0 +1,10 @@
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="/" class="nav-brand">Preparcial</a>
+        <ul class="nav-links">
+            <li><a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Inicio</a></li>
+            <li><a href="/bosses/" class="{% if request.url.path.startswith('/bosses') %}active{% endif %}">Bosses</a></li>
+            <li><a href="/characters/" class="{% if request.url.path.startswith('/characters') %}active{% endif %}">Characters</a></li>
+        </ul>
+    </div>
+</nav>
