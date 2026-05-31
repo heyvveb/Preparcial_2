@@ -22,7 +22,6 @@
                 <th>Salud</th>
                 <th>Opcional</th>
                 <th>Fases</th>
-                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,7 +33,6 @@
                 <td>{{ boss.health }}</td>
                 <td>{{ "Sí" if boss.is_optional else "No" }}</td>
                 <td>{{ boss.phase_count }}</td>
-                <td><span class="badge badge-{{ boss.status }}">{{ boss.status }}</span></td>
                 <td class="actions">
                     <a href="/bosses/{{ boss.id }}/edit" class="btn btn-sm btn-warning">Editar</a>
                     <form method="POST" action="/bosses/{{ boss.id }}/delete" style="display:inline">
