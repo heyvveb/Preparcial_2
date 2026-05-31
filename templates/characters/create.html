@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "macros/form_macros.html" as forms %}
+{% block title %}Crear Character{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Crear Character</h1>
+</div>
+<form method="POST" class="form">
+    {{ forms.input_field("Nombre", "name", form_data.get('name', ''), errors, required=true) }}
+    {{ forms.input_field("Nivel", "level", form_data.get('level', ''), errors, type="number", required=true) }}
+    {{ forms.checkbox_field("¿Es Hollow?", form_data.get('is_hollow') == 'true', errors) }}
+    {{ forms.select_field("Stat principal", "main_stat", ["Strength", "Dexterity", "Quality", "Sorcerer", "Faith", "Pyromancer", "Tank", "Hybrid"], form_data.get('main_stat', ''), errors) }}
+    {{ forms.submit_button("Crear Character") }}
+</form>
+{% endblock %}
