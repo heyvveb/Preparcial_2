@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "macros/form_macros.html" as forms %}
+{% block title %}Editar Character{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Editar Character: {{ character.name }}</h1>
+</div>
+<form method="POST" class="form">
+    {{ forms.input_field("Nombre", "name", form_data.get('name', character.name), errors, required=true) }}
+    {{ forms.input_field("Nivel", "level", form_data.get('level', character.level), errors, type="number", required=true) }}
+    {{ forms.checkbox_field("¿Es Hollow?", form_data.get('is_hollow', 'true' if character.is_hollow else ''), errors) }}
+    {{ forms.select_field("Stat principal", "main_stat", ["Strength", "Dexterity", "Quality", "Sorcerer", "Faith", "Pyromancer", "Tank", "Hybrid"], form_data.get('main_stat', character.main_stat or ''), errors) }}
+    {{ forms.submit_button("Guardar cambios") }}
+</form>
+{% endblock %}
