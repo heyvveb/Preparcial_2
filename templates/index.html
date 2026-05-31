@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Inicio - Preparcial{% endblock %}
+{% block content %}
+<div class="hero">
+    <h1>Preparcial</h1>
+    <p>Gestión de Bosses y Characters</p>
+</div>
+<div class="card-grid">
+    <div class="card">
+        <h2>Bosses</h2>
+        <p class="count">{{ boss_count }} registros</p>
+        <div class="card-actions">
+            <a href="/bosses/" class="btn btn-primary">Ver todos</a>
+            <a href="/bosses/create" class="btn btn-success">Crear nuevo</a>
+        </div>
+    </div>
+    <div class="card">
+        <h2>Characters</h2>
+        <p class="count">{{ character_count }} registros</p>
+        <div class="card-actions">
+            <a href="/characters/" class="btn btn-primary">Ver todos</a>
+            <a href="/characters/create" class="btn btn-success">Crear nuevo</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
