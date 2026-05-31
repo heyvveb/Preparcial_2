@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "macros/form_macros.html" as forms %}
+{% block title %}Crear Boss{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Crear Boss</h1>
+</div>
+<form method="POST" class="form">
+    {{ forms.input_field("Nombre", "name", form_data.get('name', ''), errors, required=true) }}
+    {{ forms.input_field("Salud (HP)", "health", form_data.get('health', ''), errors, type="number", required=true) }}
+    {{ forms.select_field("¿Es opcional?", "is_optional", ["true", "false"], form_data.get('is_optional', ''), errors) }}
+    {{ forms.input_field("Cantidad de fases", "phase_count", form_data.get('phase_count', ''), errors, type="number", required=true) }}
+    {{ forms.submit_button("Crear Boss") }}
+</form>
+{% endblock %}
