@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "macros/form_macros.html" as forms %}
+{% block title %}Bosses - Lista{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Bosses</h1>
+    <div class="header-actions">
+        <a href="/bosses/create" class="btn btn-success">+ Nuevo Boss</a>
+        <a href="/bosses/deleted" class="btn btn-secondary">Ver eliminados</a>
+    </div>
+</div>
+
+{{ forms.search_form(search) }}
+
+{% if bosses %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Salud</th>
+                <th>Opcional</th>
+                <th>Fases</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for boss in bosses %}
+            <tr>
+                <td>{{ boss.id }}</td>
+                <td>{{ boss.name }}</td>
+                <td>{{ boss.health }}</td>
+                <td>{{ "Sí" if boss.is_optional else "No" }}</td>
+                <td>{{ boss.phase_count }}</td>
+                <td><span class="badge badge-{{ boss.status }}">{{ boss.status }}</span></td>
+                <td class="actions">
+                    <a href="/bosses/{{ boss.id }}/edit" class="btn btn-sm btn-warning">Editar</a>
+                    <form method="POST" action="/bosses/{{ boss.id }}/delete" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este boss?')">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="empty-state">No hay bosses registrados.</p>
+{% endif %}
+{% endblock %}
