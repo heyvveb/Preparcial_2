@@ -190,7 +190,7 @@ async def restore_boss(id: int, session: SessionDep):
 
 @router_web.get("/bosses/deleted")
 async def list_deleted_bosses(request: Request, session: SessionDep):
-    bosses = show_all_deleted_db(session)
+    bosses = show_all_deleted_bosses_db(session)
     return _render("bosses/deleted.html", {
         "request": request,
         "bosses": bosses,
@@ -315,7 +315,7 @@ async def restore_character(id: int, session: SessionDep):
 
 @router_web.get("/characters/deleted")
 async def list_deleted_characters(request: Request, session: SessionDep):
-    characters = show_all_deleted_db(session)
+    characters = show_all_deleted_characters_db(session)
     return _render("characters/deleted.html", {
         "request": request,
         "characters": characters,
