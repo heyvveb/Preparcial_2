@@ -4,3 +4,4 @@ Instructions.txt
 __pycache__/
 .idea/
 .pytest_cache/
+Operations/__pychache__/

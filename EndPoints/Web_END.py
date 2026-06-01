@@ -190,7 +190,7 @@ async def restore_boss(id: int, session: SessionDep):
 
 @router_web.get("/bosses/deleted")
 async def list_deleted_bosses(request: Request, session: SessionDep):
-    bosses = show_all_deleted_bosses_db(session)
+    bosses = show_all_deleted_db(session)
     return _render("bosses/deleted.html", {
         "request": request,
         "bosses": bosses,
@@ -198,15 +198,28 @@ async def list_deleted_bosses(request: Request, session: SessionDep):
 
 
 @router_web.get("/characters/")
-async def list_characters(request: Request, session: SessionDep, search: str = ""):
-    if search:
-        characters = search_characters_by_name_db(search, session)
-    else:
-        characters = show_all_characters_db(session)
+async def list_characters(
+    request: Request,
+    session: SessionDep,
+    search: str = "",
+    is_hollow: str = "",
+    main_stat: str = "",
+    level_min: str = "",
+    level_max: str = "",
+):
+    is_hollow_val = None if is_hollow == "" else (is_hollow == "true")
+    main_stat_val = main_stat if main_stat else None
+    level_min_val = int(level_min) if level_min else None
+    level_max_val = int(level_max) if level_max else None
+    characters = filter_characters_db(session, search=search, is_hollow=is_hollow_val, main_stat=main_stat_val, level_min=level_min_val, level_max=level_max_val)
     return _render("characters/list.html", {
         "request": request,
         "characters": characters,
         "search": search,
+        "is_hollow": is_hollow,
+        "main_stat": main_stat,
+        "level_min": level_min,
+        "level_max": level_max,
     })
 
 
@@ -302,7 +315,7 @@ async def restore_character(id: int, session: SessionDep):
 
 @router_web.get("/characters/deleted")
 async def list_deleted_characters(request: Request, session: SessionDep):
-    characters = show_all_deleted_characters_db(session)
+    characters = show_all_deleted_db(session)
     return _render("characters/deleted.html", {
         "request": request,
         "characters": characters,
